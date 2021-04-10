@@ -1,0 +1,70 @@
+1. O(1) AI node search
+2. Громкость звука ударов физических объектов не зависит от силы удара
+
+; legend
+; -D - from Dima
+; -A - from AlexMX
+; -S - from Slipch
+; -W - from Vitya
+; -J - from Jim
+; -O - from Oles
+; -Y - from Yura
+; -K - from Koan
+
+To OLES : 
+-S	assertion failed  в stl_extensions.cpp 
+	stack: 	
+	xrCore.dll!xrDebug::backend(const char * reason=0x0012f400, const char * file=0x0160a880, int line=57)  Line 93	C++
+ 	xrCore.dll!xrDebug::fail(const char * e1=0x0160a874, const char * file=0x0160a880, int line=57)  Line 121 + 0x1f	C++
+ 	xrRender_R1.dll!xr_vector<CLightShadows::shadow>::operator[](unsigned int _Pos=3131961357)  Line 57 + 0x41	C++
+ 	xrRender_R1.dll!CLightProjector::setup(int id=-1163005939)  Line 104 + 0x6	C++
+ 	xrRender_R1.dll!sorted_L1(FixedMAP<float,SceneGraph::_MatrixItem>::TNode * N=0xffffffff)  Line 423 + 0xa8	C++
+ 	xrRender_R1.dll!FixedMAP<float,SceneGraph::_MatrixItem>::recurseRL(FixedMAP<float,SceneGraph::_MatrixItem>::TNode * N=0x2ac1f530, void (FixedMAP<float,SceneGraph::_MatrixItem>::TNode *)* CB=0x015a4100)  Line 84	C++
+ 	xrRender_R1.dll!FixedMAP<float,SceneGraph::_MatrixItem>::recurseRL(FixedMAP<float,SceneGraph::_MatrixItem>::TNode * N=0x2ac1f4cc, void (FixedMAP<float,SceneGraph::_MatrixItem>::TNode *)* CB=0x015a4100)  Line 84	C++
+ 	xrRender_R1.dll!FixedMAP<float,SceneGraph::_MatrixItem>::recurseRL(FixedMAP<float,SceneGraph::_MatrixItem>::TNode * N=0x2ac1f468, void (FixedMAP<float,SceneGraph::_MatrixItem>::TNode *)* CB=0x015a4100)  Line 84	C++
+ 	xrRender_R1.dll!FixedMAP<float,SceneGraph::_MatrixItem>::recurseRL(FixedMAP<float,SceneGraph::_MatrixItem>::TNode * N=0x2ac1f404, void (FixedMAP<float,SceneGraph::_MatrixItem>::TNode *)* CB=0x015a4100)  Line 84	C++
+ 	xrRender_R1.dll!CRender::Render()  Line 765	C++
+ 	XR_3DA.exe!IGame_Level::OnRender()  Line 193	C++
+>	xrGame.dll!CLevel::OnRender()  Line 227 + 0xb	C++
+	
+	параметры строки: -external -ltx user_w.ltx -start server(labaratory_1/single/alife) client(localhost)
+	Cлучается только в дебуговом билде не обязательно в alife. После того как на уровне 
+	добавишь какую нибудь spawn point (может даже уберешь) исправляется добавлением или убиранием 
+	spawn point с последующим make game
+	
+-D	memory leak during reload (press f7 for reload) ~ 346kb on occ_part
++J	монстры исчезают в определённых позициях (level - occ_part_jim)
++О	Обьекты у которых парент - рендерятся
++O	~160 memory operations per frame
++O	no particles
++J	актер не видим для сталкеров и монстров
++К	старые партиклы тоже не рисуются
+-K	трасеры не рисуются
++S	после взрыва ручной гранаты обьекты (в том числе актер) становятся невидимыми при FLAGS::bVisible=1
+-A	актер закрывает собой флары (выключить Enable CFModel у Актера)
++J  освещение монстров (химера, плоть) (level - практически на любом (e.g. labaratory_1)) 
+
+To WT:
+-O	(-WT) когда выбрасываешь оружие, оно исчезает (level - cs_test)
+	ЭТО ЛОГИЧНО, ТЫ Ж ВЕДЬ ДЕЛАЕШЬ 'setVisible(false)'
+	и блядь, какого хуя я должен этим заниматься???
+	помоему это твоя работа.
+	все остальное я смотреть даже не буду.
+				
+Да мне насрать. Можешь вообще ни хуя не делать.
+				
+-O	(-WT)	ни хера не работает (level - cs_test)
+-O	(-WT)	ни хера по прежнему не работает (level - cs_test)
+-K	(-WT)	детектор никак не реагирует на зону 
+-K	(-WT)	после взрыва гранаты исчезает тело убитого сталкера
+
+To AlexMX:
++O	ocasional invalid radius and/or center after update of particle system
+	(pure garbage: #INF, #QNAN, #DEN)
+	(cs_test/single)
++O	ocasional memory corruption inside particle system (on destructor, probably?)
+	(game00/single/alife)
++D	зоны глючат постоянно из-за партикловой-хрени! (game00/single/alife)
+
+To Dima:
++K	сталкеры перемещаются быстрее отыгрываемой анимации
